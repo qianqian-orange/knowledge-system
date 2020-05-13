@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function throttle(fn, delay = 100, options) {
+      let timer, now, context, args;
+      let previous = 0;
+      function throttled () {
+        context = this;
+        args = arguments;
+        now = Date.now();
+        if (!previous && options.leading === false) previous = now;
+        let residue = delay - (now - previous);
+        if (residue <= 0 || residue > delay) {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+          fn.apply(context, args);
+          previous = now;
+        } else if (!timer && options.trailing !== false) {
+          timer = setTimeout(() => {
+            timer = null;
+            previous = options.leading === false ? 0 : Date.now();
+            fn.apply(context, args);
+          }, residue);
+        }
+      }
+      throttled.cancel = function () {
+        clearTimeout(timer);
+        timer = null;
+        previous = 0;
+      }
+      return throttled;
+    }
+  </script>
+</body>
+</html>

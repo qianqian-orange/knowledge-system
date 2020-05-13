@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .pie {
+      width: 100px; 
+    height: 100px;
+      border-radius: 50%;
+      background-color: #E8E2D6;
+      background-image: linear-gradient(to right, transparent 50%, #b4a078 0);
+    }
+    .pie::after {
+      content: "";
+      display: block;
+      margin-left: 50%;
+      height: 100%;
+      border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+      background-color: inherit;
+      transform-origin: 0 50%;
+      transform: rotate(.3turn);
+      animation: pie-chart-spin1 3s linear 1.6 forwards,
+                pie-chart-bg1 3s step-end 1 forwards;
+    }
+    @keyframes pie-chart-spin1 {
+    to { transform: rotate(.5turn); }
+  }
+  @keyframes pie-chart-bg1 {
+    to { background: #b4a078; }
+  }
+  </style>
+</head>
+<body>
+  <div class="pie"></div>
+</body>
+</html>

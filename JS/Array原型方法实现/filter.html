@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.myFilter = function (callback, thisArg) {
+      let O = Object(this);
+      let len = O.length >>> 0;
+      let T = thisArg;
+      let A = [];
+      for (let k = 0; k < len; k += 1) {
+        if (k in O && callback.call(T, O[k], k, O)) {
+          A.push(O[k]);
+        }
+      }
+      return A;
+    }
+    console.log([1,2,3,4,5,6].myFilter(item => item % 2 === 0));
+  </script>
+</body>
+</html>

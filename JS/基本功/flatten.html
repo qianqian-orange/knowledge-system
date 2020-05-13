@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // strict为true则忽略非数组元素
+    // shallow为true则只扁平化一层
+    function flatten(input, shallow, strict, output) {
+      output = output || [];
+      let len = output.length;
+      for (let i = 0; i < input.length; i += 1) {
+        let value = input[i];
+        if (Array.isArray(value)) {
+          if (shallow) {
+            for (let i = 0; i < value.length; i += 1) {
+              output.push(value[i]);
+            }
+          } else {
+            flatten(value, shallow, strict, output);
+          }
+        } else if (!strict) {
+          output.push(value);
+        }
+      }
+      return output;
+    }
+    console.log(flatten([1, [2, [3, 4]]], true, false));
+  </script>
+</body>
+</html>

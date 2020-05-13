@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // function factorial(n) {
+    //   if (n === 1) return n;
+    //   return n * factorial(n - 1);
+    // }
+    // console.log(factorial(5));
+    // 尾递归
+    function factorial(n, res) {
+      if (n === 1) return res;
+      return factorial(n - 1, res * n);
+    }
+    console.log(factorial(5, 1));
+
+    function insertSort(arr) {
+      for (let i = 1; i < arr.length; i += 1) {
+        let value = arr[i];
+        let j = i;
+        for (; j > 0 && arr[j - 1] > value; j -= 1) {
+          arr[j] = arr[j - 1];
+        }
+        arr[j] = value;
+      }
+    }
+    let arr = [1,20,34,13,44,100];
+    insertSort(arr);
+    console.log(arr);
+  </script>
+</body>
+</html>

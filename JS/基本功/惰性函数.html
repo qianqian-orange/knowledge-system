@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 本质: 重写方法
+    function addEvent(type, el, fn) {
+      if (window.addEventListener) {
+        addEvent = function (type, el, fn) {
+          el.addEventListener(type, fn, false);
+        }
+      } else if (window.attachEvent) {
+        addEvent = function (type, el, fn) {
+          el.attachEvent('on' + type, fn);
+        }
+      }
+      addEvent(type, el, fn);
+    }
+  </script>
+</body>
+</html>

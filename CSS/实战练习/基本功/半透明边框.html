@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: #f1f1f1;
+    }
+    .container {
+      width: 200px;
+      height: 200px;
+      background-color: gold;
+      border: 20px solid hsla(0, 0%, 100%, .5);
+      background-clip: padding-box;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    默认情况下，背景颜色会延伸到边框下边，意味着边框透明会失效。解决方案就是使用background-clip
+   -->
+   <div class="container"></div>
+</body>
+</html>

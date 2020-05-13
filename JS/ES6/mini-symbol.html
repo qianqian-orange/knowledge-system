@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    (function () {
+      var root = this;
+
+      var generateName = (function () {
+        var prefix = 0;
+        return function (descString) {
+          prefix++;
+          return '@@' + descString + '__' + prefix;
+        }
+      })();
+
+      var MiniSymbol = function (description) {
+        if (this instanceof MiniSymbol) throw new Error('can not use new');
+        var descString = description === undefined ? undefined : String(description);
+        
+        var symbol = Object.create({
+          toString: function () {
+            return this.__Name__;
+          },
+          valueOf: function () {
+            // throw new Error('cannot convert a Symbol value');
+            return this;
+          },
+        });
+
+        Object.defineProperties(symbol, {
+          '__Description__': {
+            value: descString,
+            configurable: false,
+            enumerable: false,
+            writable: false,
+          },
+          '__Name__': {
+            value: generateName(descString),
+            writable: false,
+            configurable: false,
+            enumerable: false,
+          }
+        });
+
+        return symbol;
+      }
+
+      var map = {};
+
+      Object.defineProperties(MiniSymbol, {
+        'for': {
+          value: function (description) {
+            var descString = description === undefined ? undefined : String(description);
+            map[descString] ? map[descString] : map[descString] = MiniSymbol(descString);
+            console.log(map[descString], descString);
+            return map[descString]
+          },
+          enumerable: false,
+          writable: true,
+          configurable: true,
+        },
+        'keyFor': {
+          value: function (symbol) {
+            for (var key in map) {
+              if (map[key] === symbol) return key;
+            }
+          },
+          enumerable: false,
+          writable: true,
+          configurable: true,
+        },
+      });
+
+      root.MiniSymbol = MiniSymbol;
+    })();
+
+//     var a = MiniSymbol('foo');
+// var b = MiniSymbol('foo');
+// console.log(a ===  b);
+// console.log(a ==  b);
+
+// var o = {};
+// o[a] = 'hello';
+// o[b] = 'hi';
+// console.log(o); // {Symbol(foo): 'hi'}
+
+// console.log(a.valueOf());
+
+var c = MiniSymbol.for('zz');
+var d = MiniSymbol.for('zz');
+console.log(c === d);
+console.log(MiniSymbol.keyFor(c));
+  </script>
+</body>
+</html>

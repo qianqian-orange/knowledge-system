@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function defineReactive(obj, handler) {
+      console.log(obj);
+      let proxy = new Proxy(obj, handler);
+      for (let key in obj) {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          obj[key] = defineReactive(obj[key], handler);
+        }
+      }
+      return proxy;
+    }
+
+    function core(obj) {
+      let handler = {
+        get: function (target, prop) {
+          console.log('get');
+          return Reflect.get(target, prop);
+        },
+        set: function (target, prop, value) {
+          console.log('set', value);
+          Reflect.set(target, prop, value);
+        }
+      }
+      return defineReactive(obj, handler);
+    }
+
+    let obj = {
+      name: 'lisi',
+      scores: {
+        math: {
+          score: 100
+        }
+      }
+    }
+
+    let o = core(obj);
+    // console.log(o.name);
+    // o.name = 'zhangsan';
+    // console.log(o.name);
+    console.log(o.scores.math.score);
+    console.log('-----');
+    console.log(o.scores.math.score);
+  </script>
+</body>
+</html>

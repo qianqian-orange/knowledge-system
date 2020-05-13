@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* body, html {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      height: 2000px;
+      background-image: linear-gradient(to right top, gold 50%, #fff 50%);
+      background-size: 100% calc(100% - 100vh + 5px);
+      background-repeat: no-repeat;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      z-index: -1;
+      top: 5px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #fff;
+    } */
+  </style>
+  <style>
+    .container {
+      width: 200px;
+      height: 200px;
+      border: 10px solid red;
+      /* background-image: linear-gradient(red, red); */
+      /* background-color: red; */
+      position: relative;
+      z-index: 0;
+    }
+    .box {
+      position: absolute;
+      z-index: -1;
+      width: 100px;
+      height: 300px;
+      background-color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box"></div>
+  </div>
+</body>
+</html>

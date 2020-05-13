@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 是数组
+    // length为0
+    // length > 0 && length - 1 in obj
+    function isArrayLike(obj) {
+      if (Object.prototype.toString.call(obj) === '[object Array]') return true;
+      let len = obj.length;
+      if (len === 0) return true;
+      return len && len > 0 && (len - 1) in obj;
+    }
+
+    function each(obj, callback) {
+      if (isArrayLike(obj)) {
+        for (let i = 0; i < obj.length; i += 1) {
+          if (callback.call(obj[i], obj[i], i) === false) break;
+        }
+      } else {
+        for (let key in obj) {
+          if (callback.call(obj[key], obj[key], key) === false) break;
+        }
+      }
+      return obj;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.mySort = function (compare) {
+      if (!compare) {
+        compare = function (a, b) {
+          if (a === b) return 0;
+          a = a.toString();
+          b = b.toString();
+          if (a === b) return 0;
+          return a < b ? -1 : 1;
+        }
+      }
+
+      function insertSort(array, from, to) {
+        for (let i = from + 1; i <= to; i += 1) {
+          let value = array[i];
+          let j = i;
+          for (; j > from && compare(array[j - 1], value) > 0; j -= 1) {
+            array[j] = array[j - 1];
+          }
+          array[j] = value;
+        }
+      }
+
+      function getThird(array, from, to) {
+        let increment = 200 + (to - from) & 15;
+        let arr = [];
+        for (let i = from; i <= to; i += increment) {
+          arr.push([array[i], i]);
+        }
+        arr.mySort((a, b) => a[0] - b[0]);
+        return arr[(arr.length) >> 1][1];
+      }
+
+      function _sort(a, b, c) {
+        let arr = [a, b, c];
+        insertSort(arr, 0, 2);
+        return arr;
+      }
+
+      function quickSort(array, from, to) {
+        let third;
+        while (true) {
+          if (to - from <= 10) {
+            insertSort(array, from, to);
+            break;
+          }
+          if (to - from > 1000) {
+            third = getThird(array, from, to);
+          } else {
+            third = (to - from) >> 1;
+          }
+          [array[from], array[third], array[to]] = _sort(array[from], array[third], array[to]);
+          let pivot = array[third];
+          let lowEnd = from + 1;
+          let highStart = to;
+          array[third] = array[lowEnd];
+          array[lowEnd] = pivot;
+          for (let i = lowEnd + 1; i < highStart; i += 1) {
+            let order = compare(array[i], pivot);
+            if (order < 0) {
+              array[lowEnd++] = array[i];
+              array[i] = pivot;
+            } else if (order > 0) {
+              do {
+                order = compare(array[--highStart], pivot);
+                if (order <= 0) break;
+              } while (highStart > i);
+              if (order <= 0) {
+                let temp = array[highStart];
+                array[highStart] = array[i];
+                array[i] = temp;
+              }
+            }
+          }
+          console.log(lowEnd, highStart);
+          if (lowEnd - from > to - highStart) {
+            quickSort(array, from, lowEnd);
+            from = highStart;
+          } else {
+            quickSort(array, highStart, to);
+            to = lowEnd;
+          }
+        }
+      }
+
+      let array = this;
+      quickSort(array, 0, array.length - 1);
+    }
+
+    // var a = [0, 5, 8, 7, 6, 9, 4, 3, 2, 1, 10];
+    var a = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11];
+    a.mySort((a, b) => a - b);
+    console.log(a);
+  </script>
+</body>
+</html>

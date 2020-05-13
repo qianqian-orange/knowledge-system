@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.myMap = function (callback, thisArg) {
+      if (this === null || this === undefined) {
+        throw new Error('can\'t read property map of null or undefined');
+      }
+      if (Object.prototype.toString.call(callback) !== '[object Function]') {
+        throw new Error(`${callback} is not a function`);
+      }
+      let O = Object(this);
+      let T = thisArg;
+      let len = O.length >>> 0;
+      let A = new Array(len);
+      for (let k = 0; k < len; k += 1) {
+        if (k in O) {
+          A[k] = callback.call(T, O[k], k, O);
+        }
+      }
+      return A;
+    }
+    console.log([1,2,3].myMap(item => item * 2));
+  </script>
+</body>
+</html>

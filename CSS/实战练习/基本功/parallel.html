@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* .parallel {
+      margin: 100px;
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      transform: skew(-45deg, 45deg);
+    } */
+    li {
+      width: 100px;
+      height: 100px;
+      float: left;
+    }
+    .u1 > li {
+      background-color: red;
+    }
+    .u2 > li {
+      background-color: green;
+    }
+    .u1::after {
+      content: '';
+      /* display: block; */
+      visibility: hidden;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="parallel"></div> -->
+  <ul class="u1">
+    <li></li>
+  </ul>
+  <!-- <span style="clear: both;"></span> -->
+  <!-- <div style="clear: both;"></div> -->
+  <ul class="u2">
+    <li></li>
+  </ul>
+</body>
+</html>

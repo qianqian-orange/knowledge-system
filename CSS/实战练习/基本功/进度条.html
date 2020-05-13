@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .progress-outer {
+      width: 400px;
+      height: 20px;
+      border-radius: 10px;
+      background-color: #f1f1f1;
+      overflow: hidden;
+    }
+    .progress-inner {
+      width: 200px;
+      height: 100%;
+      border-radius: 10px;
+      /* background-image: repeating-linear-gradient(-45deg, red 0, red 5px, green 5px, green 10px); */
+      /* background-size: 20px 20px; */
+     
+      background-image: repeating-linear-gradient(-45deg, #D9CFBB 25%, #C3B393 0, #C3B393 50%,
+                    #D9CFBB 0, #D9CFBB 75%, #C3B393 0);
+      /* background-image: repeating-linear-gradient(-45deg, red 25%, green 0%, green 50%, red 0%, red 75%, green 0); */
+       /* background-position: 10px 0; */
+      background-size: 20px 20px;
+      animation: move 20s linear infinite;
+    }
+    @keyframes move {
+      to {
+        background-position: 200% 0;
+        /* transform: translate(100px, 0); */
+      }
+    }
+  </style>
+  <style>
+    .card {
+      width: 200px;
+      height: 200px;
+      /* background-color: brown; */
+      background-image: radial-gradient(circle at 100px 0, transparent 20px, brown 21px);
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="progress-outer">
+    <div class="progress-inner"></div>
+  </div> -->
+  <div class="card"></div>
+</body>
+</html>

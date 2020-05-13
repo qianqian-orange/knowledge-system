@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let arr = [1, 1, '1', '1', null, null, undefined, undefined, new String('1'), new String('1'), /a/, /a/, NaN, NaN];
+    // 第一种: 两层for循环
+    // 缺点: 对象和NaN不去重
+    // function unique(arr, isSort, callback) {
+    //   let res = [];
+    //   let seen;
+    //   let cache = [];
+    //   for (let i = 0; i < arr.length; i += 1) {
+    //     let computed = callback ? callback(arr[i], i, arr) : arr[i];
+    //     if (isSort) {
+    //       if (!i || seen !== computed) {
+    //         res.push(arr[i]);
+    //       }
+    //       seen = computed;
+    //     } else if (callback) {
+    //       if (cache.indexOf(computed) === -1) {
+    //         cache.push(computed);
+    //         res.push(arr[i]);
+    //       }
+    //     } else if (res.indexOf(arr[i]) === -1) {
+    //       res.push(arr[i]);
+    //     }
+    //   }
+    //   return res;
+    // }
+
+    // 第二种: filter
+    // 缺点: 对象不去重和NaN会忽略
+    // function unique(arr) {
+    //   return arr.filter((item, index) => arr.indexOf(item) === index);
+    // }
+    // function unique(arr) {
+    //   return arr.filter((item, index) => !index || item !== arr[index - 1]);
+    // }
+
+    // 第三种: Object
+    // 全部去重
+    // function unique(arr) {
+    //   let obj = {};
+    //   let res = [];
+    //   for (let i = 0; i < arr.length; i += 1) {
+    //     if (!obj.hasOwnProperty(typeof arr[i] + JSON.stringify(arr[i]))) {
+    //       res.push(arr[i]);
+    //       obj[typeof arr[i] + JSON.stringify(arr[i])] = true;
+    //     }
+    //   }
+    //   return res;
+    // }
+
+    // 第四种: Set
+    // 缺点: 对象不去重，但是NaN去重
+    const unique = (arr) => [...new Set(arr)];
+
+    console.log(unique(arr));
+  </script>
+</body>
+</html>

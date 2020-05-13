@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 700px;
+      height: 500px;
+      background-color: gold;
+      color: white;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container"></div>
+  <script>
+    let count = 0;
+    const c = document.querySelector('.container');
+    function handler(e) {
+      c.innerHTML = count++;
+    }
+    c.addEventListener('mousemove', debounce(handler, 1000, false));
+
+    function debounce(fn, delay = 1000, immediate) {
+      let timer, result, context, args;
+      function core() {
+        context = this;
+        args = arguments;
+        if (timer) clearTimeout(timer);
+        if (immediate) {
+          let callNow = !timer;
+          timer = setTimeout(() => {
+            timer = null;
+          }, delay);
+          if (callNow) result = fn.apply(context, args);
+        } else {
+          timer = setTimeout(() => {
+            fn.apply(context, args);
+          }, delay);
+        }
+        return result;
+      }
+      core.cancel = function () {
+        clearTimeout(timer);
+        timer = null;
+      }
+      return core;
+    }
+  </script>
+</body>
+</html>

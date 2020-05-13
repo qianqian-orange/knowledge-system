@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    (function () {
+      var root = (typeof self === 'object' && self.self === self && self) ||
+        (typeof global === 'object' && global.global === global && global) ||
+        this || {};
+      
+      var _ = function (obj) {
+        if (!(this instanceof _)) return new _(obj);
+        this._wrapped = obj;
+      }
+
+      if (typeof exports !== 'undefined' && !exports.nodeType) {
+        if (typeof module !== 'undefined' && !module.nodeType && module.exports) {
+          exports = module.exports = _;
+        }
+        exports._ = _;
+      } else {
+        root._ = _;
+      }
+
+      var isFunction = function (fn) {
+        return typeof fn === 'function';
+      }
+
+      _.functions = function (obj) {
+        var names = [];
+        for (key in obj) {
+          if (isFunction(obj[key])) names.push(key);
+        }
+        return names;
+      }
+
+      var isArrayLike = function (obj) {
+        if (Array.isArray(obj)) return true;
+        var length = obj.length;
+        if (typeof length !== 'number') return false;
+        return length === 0 || length > 0 && (length - 1) in obj;
+      }
+
+      _.each = function (obj, callback) {
+        if (isArrayLike(obj)) {
+          let length = obj.length;
+          for (let i = 0; i < length; i += 1) {
+            if (callback.call(obj[i], obj[i], i) === false) break;
+          }
+        } else {
+          for (let key in obj) {
+            if (callback.call(obj[key], obj[key], key) === false) break;
+          }
+        }
+        return obj;
+      }
+
+      _.chain = function (obj) {
+        var instance = new _(obj);
+        instanec.chain = true;
+        return instance;
+      }
+      
+      var chainResult = function (instance, obj) {
+        return instance.chain ? _.chain(obj) : obj;
+      }
+
+      _.mixin = function (obj) {
+        _.each(_.functions(obj), function (name) {
+          var func = _[name] = obj[name];
+          _.prototype[name] = function () {
+            var args = [this._wrapped];
+            args.push(arguments);
+            return chainResult(this, func.apply(this, args));
+          }
+        });
+        return _;
+      }
+
+      _.reverse = function(str) {
+        return str.split('').reverse().join('');
+      }
+
+      _.mixin(_);
+
+      _.prototype.value = function () {
+        return this._wrapped;
+      };
+    }) ();
+    // console.log(_.reverse('hello'));
+    let obj = _('hello');
+    console.log(_('hello').reverse());
+    console.dir(_);
+    // console.log(_('hello')._args);
+  </script>
+</body>
+</html>

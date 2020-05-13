@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>&#21941</h1>
+  <ul class="list"></ul>
+  <script type="text/html" id="template">
+    <% for (var i = 0; i < users.length; i += 1) { %>
+      <li>
+        <a href="<%=users[i].url%>">
+          <%=users[i].name%>
+        </a>
+      </li>
+    <% } %>
+  </script>
+  <script>
+    const template = document.getElementById('template').innerHTML;
+    console.log(template);
+    var users = [
+      { "name": "Byron", "url": "http://localhost" },
+      { "name": "Casper", "url": "http://localhost" },
+      { "name": "Frank", "url": "http://localhost" }
+    ]
+    // function resolve(str) {
+    //   str = "var p = [];p.push('" + str
+    //     .replace(/<%=(.*)%>/g, "');p.push($1);p.push('")
+    //     .replace(/<%/g, "');")
+    //     .replace(/%>/g, "p.push('")
+    //     .replace(/[\r\t\n]/g, "") + "')";
+    //   eval(str);
+    //   return p.join('');
+    // }
+
+    // function resolve(str, data) {
+    //   let body = "var p = []; p.push('" + str
+    //     .replace(/<%=(.*)%>/g, "');p.push($1);p.push('")
+    //     .replace(/<%/g, "');")
+    //     .replace(/%>/g, "p.push('")
+    //     .replace(/[\r\t\n]/g, "")
+    //     + "'); return p.join('');";
+    //   console.log(body);
+    //   var fn = new Function('users', body);
+    //   return fn(data);
+    // }
+
+    function resolve(str) {
+      let body = "var _p = ''; _p += '" + str
+        .replace(/<%=([\s\S]+?)%>/g, function (match, interpolate) {
+          return "' + " + interpolate + "+ '"
+        })
+        .replace(/<%([\s\S]+?)%>/g, function (match, evaluate) {
+          return "';" + evaluate + "_p += '";
+        })
+        .replace(/[\r\t\n]/g, "")
+        + "'; return _p;";
+      console.log(body);
+      let fn = new Function(body);
+      return fn();
+    }
+    let result = resolve(template, users);
+    document.querySelector('.list').innerHTML = result;
+
+    var escapes = {
+    "'": "'",
+    '\\': '\\',
+    '\r': 'r',
+    '\n': 'n',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+};
+
+var escapeRegExp = /\\|'|\r|\n|\u2028|\u2029/g;
+
+var escapeChar = function(match) {
+    return '\\' + escapes[match];
+};
+
+var str = 'console.log("I am \n Kevin");';
+var newStr = str.replace(escapeRegExp, escapeChar);
+console.log(newStr);
+  </script>
+</body>
+</html>

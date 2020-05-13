@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // function sub_curry(fn) {
+    //   let args = [].slice.call(arguments, 1);
+    //   return function () {
+    //     return fn.apply(this, args.concat([].slice.call(arguments)));
+    //   }
+    // }
+
+    // function curry(fn, length) {
+    //   length = length || fn.length;
+    //   let slice = Array.prototype.slice;
+    //   return function () {
+    //     if (arguments.length < length) {
+    //       return curry(sub_curry.apply(this, [fn].concat(slice.call(arguments))), length - arguments.length);
+    //     } else {
+    //       return fn.apply(this, arguments);
+    //     }
+    //   }
+    // }
+
+    function curry(fn, args) {
+      args = args || [];
+      return function () {
+        let _args = args.concat([].slice.call(arguments));
+        if (_args.length < fn.length) {
+          return curry.call(this, fn, _args);
+        } else {
+          return fn.apply(this, _args);
+        }
+      }
+    }
+
+    var fn = curry(function(a, b, c) {
+        return [a, b, c];
+    });
+
+    console.log(fn("a", "b")("c")) // ["a", "b", "c"]
+    console.log(fn('a')('b')('c'))
+  </script>
+</body>
+</html>

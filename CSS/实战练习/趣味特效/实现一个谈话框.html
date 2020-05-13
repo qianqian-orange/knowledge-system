@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .triangle {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      /* border-width: 100px;
+      border-style: solid; */
+      border-right-color: gold;
+    }
+    .dialog {
+      position: relative;
+      width: 200px;
+      height: 40px;
+      color: white;
+      background-color: gold;
+      line-height: 40px;
+      padding-left: 10px;
+      margin-left: 20px;
+      border-radius: 2px;
+    }
+    .dialog::before {
+      content: '';
+      position: absolute;
+      display: block;
+      top: 50%;
+      left: 0;
+      transform: translate(-100%, -50%);
+      border-width: 20px;
+      border: 10px solid transparent;
+      border-right-color: gold;
+    }
+    .parallel {
+      width: 100px;
+      height: 50px;
+      background-color: gold;
+      transform: skew(45deg, 0);
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="triangle"></div> -->
+  <div class="parallel"></div>
+  <!-- <div class="dialog">这是一个对话框</div> -->
+</body>
+</html>

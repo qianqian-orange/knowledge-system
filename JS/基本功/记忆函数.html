@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 如果需要大量重复的计算，或者大量计算又依赖于之前的结果，便可以考虑使用函数记忆
+    function memorize(fn) {
+      let slice = Array.prototype.slice;
+      let core = function () {
+        let cache = core.cache;
+        let key = JSON.stringify(slice.call(arguments));
+        if (cache[key]) return cache[key];
+        return cache[key] = fn.apply(this, arguments);
+      }
+      core.cache = {};
+      return core;
+    }
+
+    let count = 0;
+    function fibonacci(n) {
+      count++;
+      return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+    fibonacci = memorize(fibonacci);
+
+    for (let i = 0; i <= 10; i += 1) {
+      fibonacci(i);
+    }
+
+    console.log(count);
+
+    // function add(a, b) {
+    //   console.log('add');
+    //   return a + b;
+    // }
+    // let add2 = memorize(add);
+    // console.log(add2(1,2));
+    // console.log(add2(1,2));
+  </script>
+</body>
+</html>

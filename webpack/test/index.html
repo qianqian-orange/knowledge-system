@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="./build.js"></script>
+  <script>
+    // var task = [];
+    // var ouput = (i) => new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     console.log(i);
+    //     resolve(i);
+    //   }, 1000 * i);
+    // });
+
+    // for (var i = 0; i < 5; i += 1) {
+    //   task.push(ouput(i));
+    // }
+
+    // Promise.all(task).then(() => {
+    //   setTimeout(() => {
+    //     console.log(i);
+    //   }, 1000);
+    // });
+
+    // (async () => {
+    //   let sleep = (time) => new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, time);
+    //   });
+    //   for (var i = 0; i < 5; i += 1) {
+    //     if (i > 0) {
+    //       await sleep(1000);
+    //     }
+    //     console.log(i);
+    //   }
+    //   await sleep(1000);
+    //   console.log(i);
+    // })();
+
+    let ouput = (value) => new Promise((resolve) => {
+      setTimeout(() => {
+        console.log(value);
+        resolve();
+      }, 1000);
+    });
+
+    function *gen() {
+      console.log(0);
+      yield ouput(1);
+      yield ouput(2);
+      yield ouput(3);
+      yield ouput(4);
+      yield ouput(5);
+    }
+
+    function run (gen) {
+      let g = gen();
+
+      let next = function (data) {
+        let res = g.next(data);
+        if (res.done) return;
+        res.value.then(next);
+      }
+
+      next();
+    }
+
+    // run(gen);
+    
+    function Foo() {
+      getName = function () { alert (1); };
+      return this;
+    }
+    Foo.getName = function () { alert (2);};
+    Foo.prototype.getName = function () { alert (3);};
+    var getName = function () { alert (4);};
+    function getName() { alert (5);}
+
+    //请写出以下输出结果：
+    Foo.getName(); // alert(2)
+    getName(); // alert(4)
+    Foo().getName(); // alert(1)
+    getName(); // alert(1)
+    new Foo.getName(); // alert(2)
+    new Foo().getName(); // alert(3)
+    new new Foo().getName(); // alert(3)
+  </script>
+</body>
+</html>

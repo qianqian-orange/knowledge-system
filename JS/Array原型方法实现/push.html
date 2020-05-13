@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.myPush = function (...args) {
+      let O = Object(this);
+      let length = O.length >>> 0;
+      for (let k = 0; k < args.length; k += 1) {
+        if (k in args) {
+          O[length + k] = args[k];
+        }
+      }
+      return O.length;
+    }
+    console.log([1,2,3].push(4,5));
+
+    Array.prototype.myPop = function () {
+      let O = Object(this);
+      let len = O.length >>> 0;
+      if (len === 0) return undefined;
+      len -= 1;
+      let val = O[len];
+      delete O[len];
+      O.length = len;
+      return val;
+    }
+
+    console.log([10, 20, 30].myPop());
+  </script>
+</body>
+</html>

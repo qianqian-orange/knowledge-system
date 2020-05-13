@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100px;
+    }
+    .container div {
+      height: 100%;
+    }
+    .left, .right {
+      width: 200px;
+    }
+    .left {
+      background-color: red;
+    }
+    .middle {
+      background-color: green;
+    }
+    .right {
+      background-color: blue;
+    }
+
+    /* 方案一: 绝对定位 + float */
+    /* .middle {
+      position: absolute;
+      left: 200px;
+      right: 200px;
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    } */
+
+    /* 方案二: 绝对定位 + margin */
+    /* .left, .right {
+      position: absolute;
+      top: 0;
+    }
+    .left {
+      left: 0;
+    }
+    .right {
+      right: 0;
+    }
+    .middle {
+      margin-left: 200px;
+      margin-right: 200px;
+    } */
+
+    /* 方案三: margin + float */
+    /* .middle {
+      margin-left: 200px;
+      margin-right: 200px;
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    } */
+    
+    /* 方案四: flex */
+    /* .container {
+      display: flex;
+    }
+    .middle {
+      flex: 1;
+    } */
+
+    /* 方案五: overflow + float */
+    /* .left {
+      float: left;
+    }
+    .middle {
+      overflow: hidden;
+    }
+    .right {
+      float: right;
+    } */
+
+    /* 方案六: padding + float */
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    }
+    .middle {
+      padding-left: 200px;
+      padding-right: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="middle">123</div>
+  </div>
+</body>
+</html>

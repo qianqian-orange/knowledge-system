@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function compose() {
+      let args = arguments;
+      return function () {
+        let index = args.length - 1;
+        let result = args[index].apply(this, arguments);
+        while (index--) result = args[index].call(this, result);
+        return result;
+      }
+    }
+    function toUpperCase(x) {
+      return x.toUpperCase();
+    }
+    function hello(x) {
+      return 'HELLO, ' + x;
+    }
+    var greet = compose(hello, toUpperCase);
+    console.log(greet('kevin'));
+
+    // 需求：输入 'kevin daisy kelly'，返回 'K.D.K'
+    function sub_curry(fn) {
+      let args = [].slice.call(arguments, 1);
+      return function () {
+        return fn.apply(this, args.concat([].slice.call(arguments)));
+      }
+    }
+    function curry(fn, length) {
+      length = length || fn.length;
+      return function () {
+        if (arguments.length < length) {
+          return curry(sub_curry.apply(this, [fn].concat([].slice.call(arguments))), length - arguments.length);
+        } else {
+          return fn.apply(this, arguments);
+        }
+      }
+    }
+    
+    var split = curry(function (separator, str) { return str.split(separator); });
+    var head = function (str) { return str.slice(0, 1); }
+    var toUpperCase = function (str) { return str.toUpperCase() }
+    var map = curry(function(fn, arr) { return arr.map(fn); });
+    var join = curry(function (separator, arr) { return arr.join(separator); });
+    let fn = compose(join('.'), map(compose(toUpperCase, head)), split(' '));
+    console.log(fn('kevin daisy kelly'));
+  </script>
+</body>
+</html>

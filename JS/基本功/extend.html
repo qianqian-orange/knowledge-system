@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function isPlainObject(obj) {
+      let toString = Object.prototype.toString;
+      let hasOwnProperty = Object.prototype.hasOwnProperty;
+      if (!obj || toString.call(obj) !== '[object Object]') return false;
+      let prototype = Object.getPrototypeOf(obj);
+      if (!prototype) return true;
+      let constructor = hasOwnProperty.call(prototype, 'constructor') && prototype.constructor;
+      return typeof constructor === 'function' && hasOwnProperty.toString.call(constructor) === hasOwnProperty.toString.call(Object);
+    }
+
+    function extend() {
+      let i = 1;
+      let origin = arguments[0] || {};
+      if (typeof origin !== 'function' && typeof origin !== 'object') {
+        origin = {};
+      }
+      for (; i < arguments.length; i += 1) {
+        let target = arguments[i];
+        if (target !== null) {
+          for (key in target) {
+            let value = target[key];
+            let src = origin[key];
+            if (value === origin) continue;
+            let flag;
+            if (value && isPlainObject(value) || (flag = Array.isArray(value))) {
+              if (flag) src = Array.isArray(src) ? src : [];
+              else src = isPlainObject(src) ? src : {};
+              origin[key] = extend(src, value);
+            } else if (value !== undefined) {
+              origin[key] = value;
+            }
+          }
+        }
+      }
+      return origin;
+    }
+    var obj1 = {
+    a: 1,
+    b: {
+        c: 2
+    }
+}
+
+var obj2 = {
+    b: {
+        c: [5],
+
+    }
+}
+var d = extend(obj1, obj2)
+console.log(d);
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    ul {
+      overflow: hidden;
+    }
+    /* ul::after, ul::before {
+      content: '';
+      display: block;
+      clear: both;
+    } */
+    li {
+      float: left;
+      width: 400px;
+      height: 100px;
+      color: white;
+    }
+    .merchandiseList li {
+      background-color: red;
+    }
+
+    .taskList li {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <ul class="merchandiseList">
+    <li>1</li>
+    <li>2</li>
+    <!-- <div style="clear: both"></div> -->
+  </ul>
+  <!-- <div style="clear: both"></div> -->
+  <ul class="taskList">
+    <li>1</li>
+    <li>2</li>
+  </ul>
+</body>
+</html>

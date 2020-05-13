@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.myReduce = function (callback, initialValue) {
+      if (this === null || this === undefined) {
+        throw new Error('can not read property reduce of null or undefined');
+      }
+      if (Object.prototype.toString.call(callback) !== '[object Function]') {
+        throw new Error(`${callback} is not a function`);
+      }
+      let O = Object(this);
+      let len = O.length >>> 0;
+      let accumulator = initialValue;
+      let k = 0;
+      if (accumulator === undefined) {
+        for (; k < len; k += 1) {
+          if (k in O) {
+            accumulator = O[k];
+            break;
+          }
+        }
+        k += 1;
+      }
+      if (k === len || accumulator === undefined) {
+        throw new Error('each element of the array is empty');
+      }
+      for (; k < len; k += 1) {
+        if (k in O) {
+          accumulator = callback(accumulator, O[k], O);
+        }
+      }
+      return accumulator;
+    }
+    console.log([1,2,3,4].myReduce((pre, cur) => pre + cur, 0));
+  </script>
+</body>
+</html>

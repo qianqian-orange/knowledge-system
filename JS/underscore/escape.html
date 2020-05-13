@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var escapeMap = {
+      '>': '&gt;',
+      '<': '&lt;',
+      '&': '&amp;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "`": '&#x60;'
+    }
+    function invert(obj) {
+      let map = {};
+      Object.keys(obj).forEach((key) => {
+        map[obj[key]] = key;
+      });
+      return map;
+    }
+    var unescapeMap = invert(escapeMap);
+
+    function createEscape(map) {
+      return function (str) {
+        let source = '(?:' + Object.keys(map).join('|') + ')';
+        let testRegx = new RegExp(source);
+        let replaceRegx = new RegExp(source, 'g');
+        str = str ? str + '' : '';
+        return testRegx.test(str) ? str.replace(replaceRegx, (match) => map[match]) : str;
+      }
+    }
+
+    let escape = createEscape(escapeMap);
+    let unescape = createEscape(unescapeMap);
+
+    console.log(escape('<script>console.log(1)<\/script>'))
+  </script>
+</body>
+</html>

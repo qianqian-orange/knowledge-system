@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // function deepClone(origin) {
+    //   let parent = [];
+    //   let children = [];
+
+    //   function core(obj) {
+    //     if (obj === null) return null;
+    //     if (typeof obj !== 'object') return obj;
+    //     let index = parent.findIndex(item => item === obj);
+    //     if (index >= 0) return children[index];
+    //     parent.push(obj);
+    //     let target;
+    //     switch (Object.prototype.toString.call(obj))
+    //     {
+    //       case '[object RegExp]':
+    //         target = new RegExp(obj.source, obj.flags);
+    //         break;
+    //       case '[object Date]':
+    //         target = new Date(target.getTime());
+    //         break;
+    //       case '[object Array]':
+    //         target = [];
+    //         break;
+    //       case '[object Object]':
+    //         target = {};
+    //         break;
+    //     }
+    //     children.push(target);
+    //     for (let i in obj) {
+    //       if (obj.hasOwnProperty(i)) target[i] = deepClone(obj[i]);
+    //     }
+    //     return target;
+    //   }
+
+    //   return core(origin);
+    // }
+
+
+    // function deepClone(obj, hash = new WeakMap()) {
+    //   if (obj === null || typeof obj !== 'object') return obj;
+    //   if (hash.has(obj)) return hash.get(obj);
+    //   let target = Array.isArray(obj) ? [] : {};
+    //   hash.set(obj, target);
+    //   for (let i in obj) {
+    //     if (obj.hasOwnProperty(i)) {
+    //       if (typeof obj[i] === 'object') {
+    //         target[i] = deepClone(obj[i], hash);
+    //       } else {
+    //         target[i] = obj[i];
+    //       }
+    //     }
+    //   }
+    //   return target;
+    // }
+
+    function deepClone(obj) {
+      if (obj === null || typeof obj !== 'object') return obj;
+      let root = Array.isArray(obj) ? [] : {};
+      let stack = [
+        {
+          parent: root,
+          key: undefined,
+          data: obj,
+        }
+      ];
+      let hash = new WeakMap();
+      while (stack.length) {
+        let node = stack.pop();
+        let parent = node.parent;
+        let key = node.key;
+        let data = node.data;
+
+        if (hash.has(data)) {
+          parent[key] = hash.get(data);
+          continue;
+        }
+
+        let target = parent;
+        if (key !== undefined) target = parent[key] = Array.isArray(data) ? [] : {};
+
+        hash.set(data, target);
+
+        // let symbolKeys = Object.getOwnPropertySymbols(data);
+        // if (symbolKeys.length) {
+        //   symbolKeys.forEach((symbolKey) => {
+        //     if (typeof data[symbolKey] === 'object') {
+        //       stack.push({
+        //         parent: target,
+        //         key: symbolKey,
+        //         data: data[symbolKey]
+        //       });
+        //     } else {
+        //       target[symbolKey] = data[symbolKey];
+        //     }
+        //   });
+        // }
+
+        // for (let i in data) {
+        //   if (data.hasOwnProperty(i)) {
+        //     if (typeof data[i] === 'object') {
+        //       stack.push({
+        //         parent: target,
+        //         key: i,
+        //         data: data[i],
+        //       })
+        //     } else {
+        //       target[i] = data[i];
+        //     }
+        //   }
+        // }
+
+        // 可以获取Symbol类型的key
+        Reflect.ownKeys(data).forEach((key) => {
+          if (typeof data[key] === 'object') {
+            stack.push({
+              parent: target,
+              key,
+              data: data[key]
+            });
+          } else {
+            target[key] = data[key];
+          }
+        });
+      }
+      return root;
+    }
+
+    let obj = {
+      a: 1,
+      b: {
+        c: [2, 3],
+        d: {
+          e: 4
+        }
+      }
+    }
+    // let copy = deepClone(obj);
+    // copy.b.c.push(4);
+    // copy.f = 5;
+    // copy.a = { g: 6 }
+    // copy.b.d = [7];
+    // console.log(obj);
+    // console.log(copy);
+
+    // var a = {}
+    // var b = {};
+    // a.b = b;
+    // b.a = a;
+    // var c = deepClone(a);
+    // console.log(c);
+
+    var sym1 = Symbol("a"); // 创建新的symbol类型
+    var sym2 = Symbol.for("b"); // 从全局的symbol注册?表设置和取得symbol
+
+    let a = { name: 'zhangsan' };
+    a[sym1] = "localSymbol";
+    a[sym2] = {
+      age: 10
+    };
+
+    var b = deepClone(a);
+    console.log(b);
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    Array.prototype.mySplice = function (position, count, ...args) {
+      let O = Object(this);
+      let len = O.length >>> 0;
+      let A = new Array(count);
+      for (let i = 0; i < count; i += 1) {
+        let k = position + i;
+        if (k in O) {
+          A[i] = O[k];
+        }
+      }
+      let interval = args.length - count;
+      if (interval < 0) {
+        for (let i = position + count; i < len; i += 1) {
+          delete O[i + interval];
+          if (i in O) {
+            O[i + interval] = O[i];
+          }
+        }
+        O.length = len + interval;
+      } else if (interval > 0) {
+        O.length = len + interval;
+        for (let i = len - 1; i >= position + count; i -= 1) {
+          if (i in O) {
+            O[i + interval] = O[i];
+          }
+        }
+      }
+      for (let i = 0; i < args.length; i += 1) {
+        delete O[i + position];
+        if (i in args) {
+          O[i + position] = args[i];
+        }
+      }
+      return A;
+    }
+    let arr = new Array(4);
+    console.log(arr.mySplice(1,2,1));
+  </script>
+</body>
+</html>

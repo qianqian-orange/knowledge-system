@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function objectFactory() {
+      let obj = new Object();
+      let Constructor = [].shift.call(arguments);
+      obj.__proto__ = Constructor.prototype;
+      let res = Constructor.apply(obj, arguments);
+      return typeof res === 'object' && res !== null ? res : obj;
+    }
+    function Otaku (name, age) {
+      this.name = name;
+      this.age = age;
+
+      this.habit = 'Games';
+    }
+
+    Otaku.prototype.strength = 60;
+
+    Otaku.prototype.sayYourName = function () {
+        console.log('I am ' + this.name);
+    }
+    var person = objectFactory(Otaku, 'Kevin', '18')
+
+console.log(person.name) // Kevin
+console.log(person.habit) // Games
+console.log(person.strength) // 60
+
+person.sayYourName(); // I am Kevin
+  </script>
+</body>
+</html>

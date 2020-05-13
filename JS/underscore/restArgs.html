@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function restArgs(fn, startIndex) {
+      startIndex = startIndex ? +startIndex : fn.length - 1;
+      return function () {
+        let length = Math.max(arguments.length - startIndex, 0);
+        let rest = Array(length);
+        for (let i = 0; i < length; i += 1) {
+          rest[i] = arguments[i + startIndex];
+        }
+        switch (startIndex) {
+          case 0:
+            return fn.call(this, rest);
+          case 1:
+            return fn.call(this, arguments[0], rest);
+          case 2:
+            return fn.call(this, arguments[0], arguments[1], rest);
+        }
+        let args = [];
+        for (let i = 0; i < startIndex; i += 1) {
+          args[i] = arguments[i];
+        }
+        args.push(rest);
+        return fn.apply(this, args);
+      }
+    }
+    function fn (c) {
+      console.log(c);
+    }
+    let fn2 = restArgs(fn);
+    fn2(1,2);
+
+    var partial = restArgs(function(fn, args){
+    return restArgs(function(partialArgs) {
+        var newArgs = args.concat(partialArgs);
+        return fn.apply(this, newArgs);
+    })
+})
+
+function add(a, b, c) {
+    return a + b + c;
+}
+
+var addOne = partial(add, 1);
+console.log(addOne(2, 3)); // 6
+  </script>
+</body>
+</html>

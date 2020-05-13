@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .candy {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background-image: repeating-radial-gradient(circle at center, red, green 35px);
+    }
+    .candy::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 400px;
+      top: 400px;
+      left: 50%;
+      margin-left: -10px;
+      border-radius: 4px;
+      background-image: linear-gradient(to bottom, red, orange, yellow, green, blue, purple);
+    }
+  </style>
+</head>
+<body>
+  <div class="candy"></div>
+</body>
+</html>

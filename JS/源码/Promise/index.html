@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const PENDING = 'pending';
+    const RESOLVED = 'resolved';
+    const REJECTED = 'rejected';
+    function MiniPromise(executor) {
+      this.status = PENDING;
+      this.value = void 0;
+      this.reason = void 0;
+      this.fulfilledList = [];
+      this.rejectedList = [];
+
+      this.resolve = (value) => {
+        if (this.status !== PENDING) return;
+        this.status = RESOLVED;
+        this.value = value;
+        this.fulfilledList.forEach(fn => fn());
+      }
+
+      this.reject = (e) => {
+        if (this.status !== PENDING) return;
+        this.status = REJECTED;
+        this.reason = e;
+        this.rejectedList.forEach(fn => fn());
+      }
+
+      try {
+        executor(this.resolve, this.reject);
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function resolveResult(promise, result, resolve, reject) {
+      if (promise === result) return reject('chaining circle');
+      if (result === null || typeof result !== 'object') return resolve(result);
+      let then = result.then;
+      if (typeof then !== 'function') return resolve(result);
+      let used = false;
+      try {
+        then.call(result, (value) => {
+          if (used) return;
+          used = true;
+          resolveResult(promise, value, resolve, reject);
+        }, (e) => {
+          if (used) return;
+          used = true;
+          reject(e);
+        });
+      } catch (e) {
+        if (used) return;
+        used = true;
+        reject(e);
+      }
+    }
+
+    MiniPromise.prototype.then = function (onFulfilled, onRejected) {
+      onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
+      onRejected = typeof onRejected === 'function' ? onRejected : (e) => { throw e; };
+      let self = this;
+      let promise = new MiniPromise((resolve, reject) => {
+        let handle = (fn, val) => {
+          setTimeout(() => {
+            try {
+              let result = fn(val);
+              resolveResult(promise, result, resolve, reject);
+            } catch (e) {
+              reject(e);
+            }
+          }, 0);
+        }
+        switch (self.status)
+        {
+          case PENDING:
+            self.fulfilledList.push(() => handle(onFulfilled, self.value));
+            self.rejectedList.push(() => handle(onRejected, self.reason));
+            break;
+          case RESOLVED:
+            handle(onFulfilled, self.value);
+            break;
+          case REJECTED:
+            handle(onRejected, self.reason);
+            break;
+          default:
+            reject('the status is illegal');
+        }
+      });
+      return promise;
+    }
+
+    MiniPromise.all = function (promises) {
+      return new MiniPromise((resolve, reject) => {
+        let result = [];
+        let index = 0;
+        for (let i = 0; i < promises.length; i += 1) {
+          promises[i].then((data) => {
+            result[i] = data;
+            index++;
+            if (index === promises.length) {
+              resolve(result);
+            }
+          }, (e) => {
+            reject(e);
+          });
+        }
+      });
+    }
+
+    MiniPromise.race = function (promises) {
+      return new MiniPromise((resolve, reject) => {
+        for (let i = 0; i < promises.length; i += 1) {
+          promises[i].then(resolve, reject);
+        }
+      });
+    }
+
+    MiniPromise.prototype.catch = function (callback) {
+      return this.then(null, callback);
+    }
+
+    MiniPromise.resolve = function (value) {
+      if (value instanceof MiniPromise) return value;
+      return new MiniPromise((resolve, reject) => {
+        if (value && typeof value.then === 'function') {
+          value.then(resolve, reject);
+          return;
+        }
+        resolve(value);
+      });
+    }
+
+    MiniPromise.reject = function (e) {
+      return new MiniPromise((resolve, reject) => {
+        reject(e);
+      });
+    }
+
+    MiniPromise.prototype.finally = function (callback) {
+      return this.then((value) => {
+        return MiniPromise.resolve(callback()).then(() => value);
+      }, (e) => {
+        return MiniPromise.resolve(callback()).then(() => { throw e });
+      });
+    }
+    // new MiniPromise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve(1);
+    //   }, 1000);
+    // }).then((data) => {
+    //   console.log(data);
+    //   return new MiniPromise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve(2);
+    //     }, 2000);
+    //   });
+    // }).then((data) => {
+    //   console.log(data);
+    // });
+
+    // MiniPromise.all([
+    //   new MiniPromise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(1);
+    //     }, 1000);
+    //   }),
+    //   new MiniPromise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(2);
+    //     }, 500);
+    //   })
+    // ]).then((data) => {
+    //   console.log(data);
+    // });
+
+    new MiniPromise((resolve, reject) => {
+      resolve(1);
+    }).then((data) => {
+      console.log(data);
+    });
+    console.log('end');
+
+  </script>
+</body>
+</html>
